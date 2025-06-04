@@ -30,7 +30,7 @@ class GetStocksListAction
                 ->pagination($stocks)
                 ->send();
         } catch (\Exception $e) {
-            return $this->error('Ошибка при получении продаж')
+            return $this->error('Ошибка при получении складов')
                 ->exception($e->getMessage())->send();
         }
     }

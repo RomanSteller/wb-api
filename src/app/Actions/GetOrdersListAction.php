@@ -33,7 +33,7 @@ class GetOrdersListAction
                 ->pagination($orders)
                 ->send();
         } catch (\Exception $e) {
-            return $this->error('Ошибка при получении продаж')
+            return $this->error('Ошибка при получении заказов')
                 ->exception($e->getMessage())->send();
         }
     }

@@ -33,7 +33,7 @@ class GetIncomesListAction
                 ->pagination($incomes)
                 ->send();
         } catch (\Exception $e) {
-            return $this->error('Ошибка при получении продаж')
+            return $this->error('Ошибка при получении доходов')
                 ->exception($e->getMessage())->send();
         }
     }
