@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php-8.1/Dockerfile
+    container_name: wb-app
+    restart: unless-stopped
+    volumes:
+      - ./docker/php-8.1/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./src:/var/www/html
+    depends_on:
+      - db
+    working_dir: /var/www/html
+    environment:
+      XDEBUG_CONFIG: ${XDEBUG_CONFIG}
+    networks:
+      - wb-network
+    env_file:
+      - .env
+
+  db:
+    image: mysql:latest
+    container_name: wb-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ${DB_VOLUME}:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - wb-network
+    env_file:
+      - .env
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    container_name: wb-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - wb-network
+    env_file:
+      - .env
+
+networks:
+  wb-network:
+    driver: bridge
